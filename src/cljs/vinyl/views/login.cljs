@@ -15,8 +15,8 @@
   (swap! state assoc :password (-> e .-target .-value)))
 
 (defn log-user-in [response]
-  (session/put! :access-token (get "access-token" response))
-  (session/put! :user (get "user" response))
+  (session/put! :access-token (:access-token response))
+  (session/put! :user (:user response))
   (accountant/navigate! "/posts/new"))
 
 (defn on-login-click [e]

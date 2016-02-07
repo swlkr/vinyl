@@ -33,6 +33,7 @@
   (session/put! :current-page #'posts/new))
 
 (secretary/defroute "/posts/:id" [id]
+  (session/put! :current-post id)
   (session/put! :current-page #'posts/show))
 
 (secretary/defroute "/login" []
