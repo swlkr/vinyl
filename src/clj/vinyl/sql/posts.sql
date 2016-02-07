@@ -2,7 +2,6 @@
 -- Gets a list of all posts made by a user
 select *
 from posts
-where posts.user_id = :user_id
 
 -- name: get-posts-by-id
 -- Gets a post by an id

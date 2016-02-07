@@ -5,39 +5,13 @@
               [accountant.core :as accountant]
               [cljs-http.client :as http]
               [cljs.core.async :refer [<!]]
-              [vinyl.state :refer [state]]
-              [vinyl.components :refer [alert]]
               [vinyl.views.posts :as posts]
               [vinyl.views.login :refer [login]]
-              [vinyl.utils :refer [build-url]])
+              [vinyl.views.home :as home])
     (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;; -------------------------
 ;; Views
-
-(defn post-link [id title]
-  [:li
-    [:a {:href (str "/posts/" id)} title]])
-
-(defn home-page []
-  (r/create-class
-    {:component-will-mount
-      (fn []
-        (let [url (build-url "api" "users" "2" "posts")]
-          (go
-            (let [{:keys [body status]} (<! (http/get url {:with-credentials? false}))]
-              (if (contains? body :error)
-                (swap! state assoc-in [:error (:error body)])
-                (swap! state assoc-in [:posts] body))))))
-     :reagent-render
-      (fn []
-        (let [{:keys [posts error]} @state]
-          [:div
-            [:h2 "Adventure Walker"]
-            [alert error]
-            (for [post posts]
-              (let [{:keys [id title]} post]
-                ^{:key id} [post-link id title]))]))}))
 
 (defn about-page []
   [:div [:h2 "About vinyl"]
@@ -50,7 +24,7 @@
 ;; Routes
 
 (secretary/defroute "/" []
-  (session/put! :current-page #'home-page))
+  (session/put! :current-page #'home/index))
 
 (secretary/defroute "/about" []
   (session/put! :current-page #'about-page))

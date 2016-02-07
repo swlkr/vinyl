@@ -19,7 +19,8 @@
           (swap! state assoc-in [:posts] body))))))
 
 (defn show [id]
-  [:div (str "show post" id)])
+  [:header
+    [:h1 {:class "text-center"}]])
 
 (defn new []
   (let [{:keys [title content error posts]} @state]

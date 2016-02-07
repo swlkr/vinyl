@@ -11,9 +11,9 @@
       (posts/create user title content))))
 
 (defroutes routes
-  (GET "/api/users/:user_id/posts" [user_id :<< as-int :as request]
+  (GET "/api/posts" []
     {:status 200
-     :body (db/get-posts {:user_id user_id})})
+     :body (map posts/format-post (db/get-posts))})
   (GET "/api/posts/:id" [id :<< as-int]
-    {:status 200;}
+    {:status 200
      :body (first (db/get-posts-by-id {:id id}))}))

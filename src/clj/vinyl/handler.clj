@@ -46,8 +46,12 @@
      [:meta {:charset "utf-8"}]
      [:meta {:name "viewport"
              :content "width=device-width, initial-scale=1"}]
+     [:link {:href "https://fonts.googleapis.com/css?family=Lato:400,300,100,700" :rel "stylesheet"}]
+     [:link {:href "https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" :rel "stylesheet"}]
+     [:title "Adventure Walker"]
      (include-css "/css/bootstrap.min.css")
      (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))]
+
     [:body
      mount-target
      (include-js "/js/app.js")]]))
