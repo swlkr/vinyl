@@ -11,7 +11,21 @@
             [bunyan.core :as bunyan]
             [vinyl.routes.posts :as posts]
             [vinyl.routes.tokens :as tokens]
-            [vinyl.logic.tokens :refer [decode-token]]))
+            [vinyl.logic.tokens :refer [decode-token]]
+            [ragtime.jdbc :as jdbc]
+            [ragtime.repl :as repl]
+            [vinyl.db :as db]))
+
+; database migrations
+(defn load-config []
+  {:datastore  (jdbc/sql-database (str "jdbc:" db/database-url))
+   :migrations (jdbc/load-resources "migrations")})
+
+(defn migrate []
+ (repl/migrate (load-config)))
+
+(defn rollback []
+ (repl/rollback (load-config)))
 
 ; api error handling middleware
 (defn wrap-fallback-exception [handler]

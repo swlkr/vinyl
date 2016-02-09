@@ -30,8 +30,8 @@
                  [ring/ring-devel "1.4.0"]
                  [ring/ring-json "0.4.0"]]
 
-  :aliases {"migrate"  ["run" "-m" "api.core/migrate"]
-            "rollback" ["run" "-m" "api.core/rollback"]}
+  :aliases {"migrate"  ["run" "-m" "vinyl.handler/migrate"]
+            "rollback" ["run" "-m" "vinyl.handler/rollback"]}
 
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
