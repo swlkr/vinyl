@@ -1,6 +1,8 @@
 (ns vinyl.util)
 
-(defn foo-cljc [x]
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn get-excerpt [content]
+  (let [end (min (count content) 140)
+        excerpt (subs (or content "") 0 end)]
+    (if (= end 140)
+      (str excerpt "...")
+      excerpt)))

@@ -21,19 +21,18 @@
         date (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") created_at)]
     (assoc post :date date)))
 
-(defn get-excerpt-length [content]
-  (if (> (count content) 140)
-    140
-    (count content)))
+(defn get-excerpt [content]
+  (let [end (min (count content) 140)
+        excerpt (subs content 0 end)]
+    (if (> end 140)
+      (str excerpt "...")
+      excerpt)))
 
-(defn format-excerpt [post]
-  (let [{:keys [content]} post
-        excerpt (subs content 0 (get-excerpt-length content))]
-    (if (> (count content) 140)
-      (assoc post :excerpt (str excerpt "..."))
-      (assoc post :excerpt excerpt))))
+(defn add-excerpt [post]
+  (let [excerpt (get-excerpt (:content post))]
+    (assoc post :excerpt excerpt)))
 
 (defn format-post [post]
   (-> post
       (format-date)
-      (format-excerpt)))
+      (add-excerpt)))

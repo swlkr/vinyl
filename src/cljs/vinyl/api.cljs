@@ -13,3 +13,7 @@
 
 (defn post [url params & rest]
     (http/post url {:json-params params :headers (format-headers (first rest))}))
+
+(defn upload [url file & rest]
+  (http/post url {:multipart-params [["file" file]]
+                  :headers (format-headers (first rest))}))

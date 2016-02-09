@@ -28,7 +28,8 @@
                  [ring/ring-defaults "0.1.5"]
                  [ring/ring-core "1.4.0"]
                  [ring/ring-devel "1.4.0"]
-                 [ring/ring-json "0.4.0"]]
+                 [ring/ring-json "0.4.0"]
+                 [markdown-clj "0.9.85"]]
 
   :aliases {"migrate"  ["run" "-m" "vinyl.handler/migrate"]
             "rollback" ["run" "-m" "vinyl.handler/rollback"]}

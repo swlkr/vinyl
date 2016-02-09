@@ -52,7 +52,9 @@
                           [:li "California"]
                           [:li "New York"]]]]]
                   (for [post posts]
-                    ^{:key (:id post)} [card post])]]
+                    ^{:key (:id post)}
+                     [:div {:class "col-xs-12 col-sm-pull-3 col-sm-3"}
+                       [card post]])]]
               [:div {:class "push bg-gray"}]]
             [:footer {:class "bg-gray footer text-center"}
               "Made with "

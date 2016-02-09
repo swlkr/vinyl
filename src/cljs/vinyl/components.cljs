@@ -38,14 +38,13 @@
 
 (defn card [props]
   (let [{:keys [id date title excerpt cover-image-url]} props]
-    [:div {:class "col-xs-12 col-sm-pull-3 col-sm-3"}
-      [:div {:class "card"}
-        [:h4 {:class "header"} title]
-        [:img {:class "img-responsive" :src cover-image-url :alt "cover image"}]
-        [:div {:class "body"}
-          [:span  {:style {:whiteSpace "pre-line"}}
-            excerpt]
-          [:a {:href (str "/posts/" id) :class "tiffany-light m-t-lg"} "Continue Reading  "
-            [icon "long-arrow-right"]]]
-        [:div {:class "footer"}
-          [icon "clock-o"] (str " " date)]]]))
+    [:div {:class "card"}
+      [:h4 {:class "header"} title]
+      [:img {:class "img-responsive" :src cover-image-url :alt "cover image"}]
+      [:div {:class "body"}
+        [:span  {:style {:whiteSpace "pre-line"}}
+          excerpt]
+        [:a {:href (str "/posts/" id) :class "tiffany-light m-t-lg"} "Continue Reading  "
+          [icon "long-arrow-right"]]]
+      [:div {:class "footer"}
+        [icon "clock-o"] (str " " date)]]))

@@ -9,4 +9,5 @@
      :tags []
      :email nil
      :password nil
-     :posts []}))
+     :posts []
+     :photos []}))
