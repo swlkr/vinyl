@@ -1,9 +1,10 @@
 (ns vinyl.server
   (:require [vinyl.handler :refer [app]]
-            [environ.core :refer [env]]
+            [vinyl.config :as config]
+            [vinyl.utils :refer [parse-int]]
             [ring.adapter.jetty :refer [run-jetty]])
   (:gen-class))
 
 (defn -main [& args]
-  (let [port (Integer/parseInt (or (env :port) "3000"))]
+  (let [port (parse-int config/port 3000)]
     (run-jetty app {:port port :join? false})))

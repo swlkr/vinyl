@@ -16,10 +16,12 @@ limit 1
 insert into posts (
   title,
   content,
+  cover_image_url,
   user_id
 ) values (
   :title,
   :content,
+  :cover_image_url,
   :user_id
 )
 
@@ -33,4 +35,5 @@ where id = :id
 update posts
 set title = coalesce(:title, title),
     content = coalesce(:content, content)
+    cover_image_url = coalesce(:cover_image_url, cover_image_url)
 where id = :id

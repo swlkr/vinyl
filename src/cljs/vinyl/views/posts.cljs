@@ -22,17 +22,12 @@
   (add-post post)
   (accountant/navigate! "/"))
 
-(defn handle-error [body]
-  (let [{:keys [error]} body]
-    (if (nil? error)
-      body)))
-
 (defn on-save-click []
-  (let [params (select-keys @state [:title :content])]
+  (let [params (select-keys @state [:title :content :cover-image-url])]
     (go
       (let [{:keys [body status]} (<! (api/post "/api/posts" params))
             {:keys [error]} body]
-        (if (nil? error)
+        (if (= status 200)
           (add-post-and-go-home body)
           (swap! state assoc :error error))))))
 
@@ -43,6 +38,13 @@
         (= (:id p) id))
       posts)))
 
+(defn swap-photo! [url]
+  (let [{:keys [content photos]} @state]
+    (swap! state update-in [:photos] conj url)
+    (if (> (count photos) 0)
+      (swap! state assoc :content (str content "\n\n![image](" url ")"))
+      (swap! state assoc :cover-image-url url))))
+
 (defn get-file-preview [e callback]
   (let [file (first (array-seq (-> e .-target .-files)))
         file-reader (js/FileReader.)]
@@ -51,14 +53,15 @@
         (callback ev file)))
     (.readAsDataURL file-reader file)))
 
+(defn file-preview-callback [e file]
+  (go
+    (let [{:keys [body status]} (<! (api/upload "/api/photos" file))]
+      (if (nil? (:error body))
+        (swap-photo! (:url body))
+        (swap! status assoc :error (:error body))))))
+
 (defn on-file-change [e]
-  (get-file-preview e
-    (fn [ev file]
-      (let [{:keys [content photos]} @state]
-        (swap! state update-in [:photos] conj (-> ev .-target .-result))
-        (if (> (count photos) 0)
-          (swap! state assoc :content (str content "\n![image1](" (-> ev .-target .-result) ")"))
-          nil)))))
+  (get-file-preview e file-preview-callback))
 
 (defn show []
   (let [id (js/parseInt (session/get :current-post) 10)
@@ -69,7 +72,7 @@
         [:h1 {:class "text-center"} title]]
       [:div {:class "row"}
         [:div {:class "col-xs-10 col-xs-offset-1"}
-          [:div {:class "post"} content]]]]))
+          [:div {:class "post responsive-images" :dangerouslySetInnerHTML {:__html (md->html content)}}]]]]))
 
 (defn new []
   (let [{:keys [title content photos error posts]} @state]
@@ -102,4 +105,4 @@
                      :cover-image-url (first photos)}]]
             [:div {:class "col-sm-7"}
               [:h2 {:class "text-center"} title]
-              [:div {:style {:width "100%"} :dangerouslySetInnerHTML {:__html (md->html content)}}]]]]]]))
+              [:div {:class "responsive-images" :dangerouslySetInnerHTML {:__html (md->html content)}}]]]]]]))

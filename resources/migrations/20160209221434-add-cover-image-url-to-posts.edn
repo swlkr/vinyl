@@ -1,0 +1,2 @@
+{:up ["ALTER TABLE posts ADD COLUMN cover_image_url text;"]
+ :down ["ALTER TABLE posts DROP COLUMN cover_image_url;"]}

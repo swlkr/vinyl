@@ -1,12 +1,12 @@
 (ns vinyl.api
   (:require [cljs-http.client :as http]
-            [reagent.session :as session]))
+            [vinyl.state :refer [state]]))
 
 (defn get [url headers]
   (http/get url {:headers headers}))
 
 (defn format-headers [headers]
-  (let [access-token (session/get :access-token)]
+  (let [access-token (.getItem js/localStorage "access-token")]
     (if (nil? access-token)
       headers
       (merge headers {"Authorization" access-token}))))

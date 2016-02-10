@@ -212,3 +212,7 @@ a.no-link:hover {
 .min-full-height {
   min-height: 100%;
 }
+
+.responsive-images img {
+  width: 100%;
+}

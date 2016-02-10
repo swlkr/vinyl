@@ -11,7 +11,6 @@
                  [reagent-utils "0.1.7"]
                  [compojure "1.4.0"]
                  [hiccup "1.0.5"]
-                 [environ "1.0.2"]
                  [org.clojure/clojurescript "1.7.228" :scope "provided"]
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.6" :exclusions [org.clojure/tools.reader]]
@@ -29,13 +28,14 @@
                  [ring/ring-core "1.4.0"]
                  [ring/ring-devel "1.4.0"]
                  [ring/ring-json "0.4.0"]
-                 [markdown-clj "0.9.85"]]
+                 [markdown-clj "0.9.85"]
+                 [envvar "1.1.0"]
+                 [clj-aws-s3 "0.3.10" :exclusions [joda-time]]]
 
   :aliases {"migrate"  ["run" "-m" "vinyl.handler/migrate"]
             "rollback" ["run" "-m" "vinyl.handler/rollback"]}
 
-  :plugins [[lein-environ "1.0.2"]
-            [lein-cljsbuild "1.1.1"]
+  :plugins [[lein-cljsbuild "1.1.1"]
             [lein-asset-minifier "0.2.4"
              :exclusions [org.clojure/clojure]]]
 
@@ -114,10 +114,6 @@
 
                               :css-dirs ["resources/public/css"]
                               :ring-handler vinyl.handler/app}
-
-                   :env {:dev true
-                         :secret "7Gc3fyrXAZ5D2PS13Ir414so9sWsOErF"
-                         :database-url "postgresql://localhost:5432/adventure_walker"}
 
                    :cljsbuild {:builds {:app {:source-paths ["env/dev/cljs"]
                                               :compiler {:main "vinyl.dev"

@@ -1,7 +1,7 @@
 (ns vinyl.logic.tokens
   (:require [clj-jwt.core :refer [verify jwt to-str sign str->jwt]]
             [clj-time.core :refer [now plus days]]
-            [environ.core :refer [env]]))
+            [vinyl.config :as config]))
 
 (def claim
   {:iss "self"
@@ -25,7 +25,7 @@
 (defn decode-token [token]
   (if (nil? token)
     nil
-    (decode token (env :secret))))
+    (decode token config/secret)))
 
 (defn generate-token [payload]
-  (generate (build payload) (env :secret)))
+  (generate (build payload) config/secret))

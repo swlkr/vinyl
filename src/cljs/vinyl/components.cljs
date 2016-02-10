@@ -1,4 +1,5 @@
-(ns vinyl.components)
+(ns vinyl.components
+  (:require [markdown.core :refer [md->html]]))
 
 (defn alert [message type]
   (if (or (nil? message) (empty? message))
@@ -42,8 +43,7 @@
       [:h4 {:class "header"} title]
       [:img {:class "img-responsive" :src cover-image-url :alt "cover image"}]
       [:div {:class "body"}
-        [:span  {:style {:whiteSpace "pre-line"}}
-          excerpt]
+        [:span {:class "responsive-images" :style {:whiteSpace "pre-line"} :dangerouslySetInnerHTML {:__html (md->html excerpt)}}]
         [:a {:href (str "/posts/" id) :class "tiffany-light m-t-lg"} "Continue Reading  "
           [icon "long-arrow-right"]]]
       [:div {:class "footer"}

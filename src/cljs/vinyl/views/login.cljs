@@ -4,7 +4,7 @@
             [vinyl.state :refer [state]]
             [vinyl.utils :refer [build-url]]
             [vinyl.api :as api]
-            [reagent.session :as session]
+            [reagent.core :as r]
             [accountant.core :as accountant])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -15,9 +15,9 @@
   (swap! state assoc :password (-> e .-target .-value)))
 
 (defn log-user-in [response]
-  (session/put! :access-token (:access-token response))
-  (session/put! :user (:user response))
-  (accountant/navigate! "/posts/new"))
+  (let [{:keys [access-token user]} response]
+    (.setItem js/localStorage "access-token" access-token)
+    (accountant/navigate! "/posts/new")))
 
 (defn on-login-click [e]
   (let [params (select-keys @state [:email :password])]
@@ -26,7 +26,7 @@
       (let [response (<! (api/post "api/tokens" params))
             {:keys [body status]} response]
         (if (= status 401)
-          (swap! state assoc-in [:error] (:error body))
+          (swap! state assoc :error (:error body))
           (log-user-in body))))))
 
 (defn login []

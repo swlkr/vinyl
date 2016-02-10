@@ -1,13 +1,10 @@
 (ns vinyl.db
   (:require [yesql.core :refer [defqueries]]
-            [environ.core :refer [env]]
-            [vinyl.utils :refer [dissoc-nil-values]]))
-
-(def database-url
-  (env :database-url))
+            [vinyl.utils :refer [dissoc-nil-values]]
+            [vinyl.config :as config]))
 
 (def database-uri
-  (java.net.URI. database-url))
+  (java.net.URI. config/database-url))
 
 (def user-and-password
   (let [user-info (.getUserInfo database-uri)]

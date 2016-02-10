@@ -1,24 +1,25 @@
 (ns vinyl.handler
-  (:require [compojure.core :refer [GET wrap-routes defroutes]]
+  (:require [compojure.core :refer [GET POST wrap-routes defroutes]]
             [compojure.route :refer [not-found resources]]
             [hiccup.core :refer [html]]
             [hiccup.page :refer [include-js include-css]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [vinyl.middleware :refer [wrap-middleware]]
             [ring.middleware.json :as ring-json]
-            [environ.core :refer [env]]
             [ring.middleware.reload :refer [wrap-reload]]
+            [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [bunyan.core :as bunyan]
             [vinyl.routes.posts :as posts]
+            [vinyl.routes.photos :as photos]
             [vinyl.routes.tokens :as tokens]
             [vinyl.logic.tokens :refer [decode-token]]
             [ragtime.jdbc :as jdbc]
             [ragtime.repl :as repl]
-            [vinyl.db :as db]))
+            [vinyl.config :as config]))
 
 ; database migrations
 (defn load-config []
-  {:datastore  (jdbc/sql-database (str "jdbc:" db/database-url))
+  {:datastore  (jdbc/sql-database (str "jdbc:" config/database-url))
    :migrations (jdbc/load-resources "migrations")})
 
 (defn migrate []
@@ -64,14 +65,15 @@
      [:link {:href "https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" :rel "stylesheet"}]
      [:title "Adventure Walker"]
      (include-css "/css/bootstrap.min.css")
-     (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))]
+     (include-css (if config/dev? "/css/site.css" "/css/site.min.css"))]
 
     [:body
      mount-target
      (include-js "/js/app.js")]]))
 
 (defroutes protected-api-routes
-  posts/protected-routes)
+  posts/protected-routes
+  photos/protected-routes)
 
 (defroutes api-routes
   posts/routes
@@ -80,7 +82,7 @@
 
 (defn wrap-api-middleware [handler]
   (-> handler
-      (wrap-reload)))
+      (wrap-multipart-params)))
 
 (defroutes site-routes
   (GET "/" [] loading-page)
@@ -97,4 +99,4 @@
       (wrap-routes wrap-middleware))
   (not-found "Not found"))
 
-(def app routes)
+(def app (wrap-reload routes))

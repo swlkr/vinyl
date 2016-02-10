@@ -1,16 +1,17 @@
 (ns vinyl.logic.posts
-  (:require [vinyl.db :as db]))
+  (:require [vinyl.db :as db]
+            [vinyl.utils :refer [filter-nil-values]]))
 
-(defn insert-params [user title content]
-  {:user_id (:id user)
-   :title title
-   :content content})
+(defn build-insert-params [params]
+  (let [{:keys [user title content cover-image-url]} params]
+    {:user_id (:id user)
+     :title title
+     :content content
+     :cover_image_url cover-image-url}))
 
-(defn create [user title content]
-  (let [params (insert-params user title content)]
-    (if (or
-          (some nil? [user title content])
-          (some empty? [title content]))
+(defn create [post-params]
+  (let [params (build-insert-params post-params)]
+    (if (some empty? (map #(str %) (vals params)))
       {:status 422
        :body {:error "You need to fill in both title and body"}}
       {:status 200
@@ -32,7 +33,14 @@
   (let [excerpt (get-excerpt (:content post))]
     (assoc post :excerpt excerpt)))
 
+(defn format-cover-image-url [post]
+  (let [{:keys [cover_image_url]} post]
+    (-> post
+        (assoc :cover-image-url cover_image_url)
+        (dissoc :cover_image_url))))
+
 (defn format-post [post]
   (-> post
       (format-date)
-      (add-excerpt)))
+      (add-excerpt)
+      (format-cover-image-url)))
