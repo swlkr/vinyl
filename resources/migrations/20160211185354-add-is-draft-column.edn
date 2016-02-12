@@ -1,0 +1,2 @@
+{:up ["ALTER TABLE posts ADD COLUMN is_draft bit;"]
+ :down ["ALTER TABLE posts DROP COLUMN is_draft;"]}

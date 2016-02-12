@@ -2,6 +2,12 @@
 -- Gets a list of all posts made by a user
 select *
 from posts
+where is_draft = 0
+
+-- name: get-drafts
+select *
+from posts
+where is_draft = 1
 
 -- name: get-posts-by-id
 -- Gets a post by an id
@@ -17,12 +23,14 @@ insert into posts (
   title,
   content,
   cover_image_url,
-  user_id
+  user_id,
+  is_draft
 ) values (
   :title,
   :content,
   :cover_image_url,
-  :user_id
+  :user_id,
+  :is_draft
 )
 
 -- name: delete-post<!
@@ -34,6 +42,7 @@ where id = :id
 -- Updates a post
 update posts
 set title = coalesce(:title, title),
-    content = coalesce(:content, content)
-    cover_image_url = coalesce(:cover_image_url, cover_image_url)
+    content = coalesce(:content, content),
+    cover_image_url = coalesce(:cover_image_url, cover_image_url),
+    is_draft = coalesce(:is_draft, is_draft)
 where id = :id

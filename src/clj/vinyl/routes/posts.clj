@@ -6,9 +6,8 @@
 
 (defroutes protected-routes
   (POST "/api/posts" {body :body :as request}
-    (let [{:keys [title content cover-image-url]} body
-          user (:user request)]
-      (posts/create {:user user :title title :content content :cover-image-url cover-image-url}))))
+    (let [user (:user request)]
+      (posts/create (merge body {:user user})))))
 
 (defroutes routes
   (GET "/api/posts" []

@@ -3,11 +3,12 @@
             [vinyl.utils :refer [filter-nil-values]]))
 
 (defn build-insert-params [params]
-  (let [{:keys [user title content cover-image-url]} params]
+  (let [{:keys [user title content cover-image-url is-draft]} params]
     {:user_id (:id user)
      :title title
      :content content
-     :cover_image_url cover-image-url}))
+     :cover_image_url cover-image-url
+     :is_draft is-draft}))
 
 (defn create [post-params]
   (let [params (build-insert-params post-params)]
