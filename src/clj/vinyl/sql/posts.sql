@@ -2,12 +2,12 @@
 -- Gets a list of all posts made by a user
 select *
 from posts
-where is_draft = 0
+where is_draft = 'f'
 
 -- name: get-drafts
 select *
 from posts
-where is_draft = 1
+where is_draft = 't'
 
 -- name: get-posts-by-id
 -- Gets a post by an id

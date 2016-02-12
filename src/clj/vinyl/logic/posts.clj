@@ -1,6 +1,5 @@
 (ns vinyl.logic.posts
-  (:require [vinyl.db :as db]
-            [vinyl.utils :refer [filter-nil-values]]))
+  (:require [vinyl.db :as db]))
 
 (defn build-insert-params [params]
   (let [{:keys [user title content cover-image-url is-draft]} params]
