@@ -76,6 +76,7 @@
   photos/protected-routes)
 
 (defroutes api-routes
+  (GET "/api/status" [] {:status 200 :body {:status "alive"}})
   posts/routes
   tokens/routes
   (wrap-routes protected-api-routes wrap-jwt-auth))
