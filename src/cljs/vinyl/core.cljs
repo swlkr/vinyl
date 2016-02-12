@@ -30,7 +30,11 @@
   (session/put! :current-page #'about-page))
 
 (secretary/defroute "/posts/new" []
-  (session/put! :current-page #'posts/new))
+  (let [access-token (.getItem js/localStorage "access-token")]
+    (session/put! :current-page #'posts/new)
+    (if (= access-token nil)
+      (accountant/navigate! "/login")
+      nil)))
 
 (secretary/defroute "/posts/:id" [id]
   (session/put! :current-post id)
