@@ -100,4 +100,9 @@
       (wrap-routes wrap-middleware))
   (not-found "Not found"))
 
-(def app (wrap-reload routes))
+(def reloadable-app
+  (if config/dev?
+    (wrap-reload #'routes)
+    routes))
+
+(def app reloadable-app)
