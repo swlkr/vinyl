@@ -35,7 +35,7 @@
       (handler request)
       (catch Exception e
         (let [{:keys [status]} (ex-data e)]
-          {:status (or status :500)
+          {:status (or status 500)
            :headers {"Content-Type" "application/json"}
            :body {:error (.getMessage e)}})))))
 
