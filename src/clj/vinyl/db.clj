@@ -27,3 +27,6 @@
 
 (defqueries "vinyl/sql/posts.sql"
   {:connection database-spec})
+
+(defqueries "vinyl/sql/introspection.sql"
+  {:connection database-spec})
